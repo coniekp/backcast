@@ -1,19 +1,19 @@
 var VideoPlayerView = Backbone.View.extend({
   
-  initialize: function (){
+  initialize: function () {
     this.listenTo(this.collection, 'select', this.selectVideo);
-    this.model  = this.collection.at(0);
+    this.listenTo($(this.$el.find('iframe')), 'ended', function() { console.log('done'); });
+    this.model = this.collection.at(0);
     this.render();
   },
   
-  
   selectVideo: function (selected) {
-    this.model = selected || this.model;
+    this.model = selected;
     this.render();
   },
 
   render: function() {
-    if(!this.model){
+    if (!this.model) {
       this.$el.html('<div class="loading">Please wait...</div>');
     } else {
       var url = 'https://www.youtube.com/embed/' + this.model.get('id');
@@ -25,8 +25,7 @@ var VideoPlayerView = Backbone.View.extend({
       this.$el.find('iframe').attr('src', url);
       this.$el.find('h3').html(info.title);
       this.$el.find('.video-player-details div').html(info.description);
-
-      //{snippet: this.model.attributes.snippet}
+ 
     }
     
     return this;
